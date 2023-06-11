@@ -5,7 +5,7 @@ import {apiServer} from '../../../server.config';
 import {fetchProfileData} from '../../components/MyProfile';
 import axiosInstance from '../../utils/Auth/RefreshToken';
 
-const MyProfile = () => {
+const MyPage = () => {
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(null);
 
@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyProfile;
+export default MyPage;

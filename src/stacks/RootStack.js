@@ -4,6 +4,7 @@ import {
   CardStyleInterpolators,
 } from '@react-navigation/native-stack';
 import HomeStack from './HomeStack';
+import MyProfile from '../pages/MyPage';
 const Stack = createNativeStackNavigator();
 
 function RootStack() {
@@ -75,10 +76,11 @@ function RootStack() {
         transitionConfig: TransitionConfiguration,
       }}>
       <Stack.Screen
-        name="Main"
+        name="Main" // HomeStack 네비게이터의 이름을 지정합니다.
         component={HomeStack}
         options={{headerShown: false}}
       />
+      {/* <Stack.Screen name="myPage" component={MyProfile} /> */}
     </Stack.Navigator>
   );
 }

@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Button} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Route from '../TodayRoute';
 import MyProfile from '../MyPage';
+import {useNavigation} from '@react-navigation/native';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  //   const navigation = useNavigation();
 
   useEffect(() => {
     checkLoginStatus();
@@ -21,7 +23,11 @@ const HomeScreen = () => {
       <Text style={styles.title}>Home</Text>
       {isLoggedIn ? (
         <View>
-          <MyProfile />
+          <View>
+            <Button
+              title="My Profile"
+              onPress={() => navigation.navigate('myPage')}></Button>
+          </View>
 
           <Route />
         </View>
