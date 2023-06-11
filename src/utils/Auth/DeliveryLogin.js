@@ -3,7 +3,7 @@ import axiosInstance from './RefreshToken';
 import {apiServer} from '../../../server.config';
 import axios from 'axios';
 
-const DeliveryLogin = async (id, password, navigation) => {
+const DeliveryLogin = async (id, password, navigation, setModalVisible) => {
   const body = {
     id: id,
     password: password,
@@ -26,6 +26,7 @@ const DeliveryLogin = async (id, password, navigation) => {
     navigation.navigate('Home'); // 페이지 이동
   } catch (err) {
     console.log('로그인 실패:', err);
+    setModalVisible(true); // 로그인 실패 시 모달 표시
   }
 };
 

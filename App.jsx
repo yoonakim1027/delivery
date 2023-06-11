@@ -1,3 +1,6 @@
+// App.js
+
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from './src/pages/Home';
@@ -11,7 +14,7 @@ const store = configureStore({
 });
 const Stack = createStackNavigator();
 
-function App() {
+const App = () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
@@ -22,6 +25,6 @@ function App() {
       </NavigationContainer>
     </Provider>
   );
-}
+};
 
 export default App;

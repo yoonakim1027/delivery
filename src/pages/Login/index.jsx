@@ -8,6 +8,8 @@ import {
   SafeAreaView,
   TextInput,
   Text,
+  Modal,
+  Button,
 } from 'react-native';
 import DeliveryLogin from '../../utils/Auth/DeliveryLogin';
 import {useDispatch} from 'react-redux';
@@ -16,11 +18,21 @@ import {useNavigation} from '@react-navigation/native';
 export default function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    DeliveryLogin(id, password, navigation);
+  const handleLogin = async () => {
+    try {
+      await DeliveryLogin(id, password, navigation, setModalVisible);
+    } catch (error) {
+      console.log('로그인 실패:', error);
+      setModalVisible(true); // 로그인 실패 시 모달 표시
+    }
+  };
+
+  const closeModal = () => {
+    setModalVisible(false); // 모달 닫기
   };
 
   return (
@@ -64,6 +76,29 @@ export default function Login() {
           </View>
         </TouchableOpacity>
       </View>
+
+      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text>Login Failed</Text>
+            <Button title="Close" onPress={closeModal} />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    alignItems: 'center',
+  },
+});
