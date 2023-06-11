@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from './RefreshToken';
 import {apiServer} from '../../../server.config';
-import axios from 'axios';
 
 const DeliveryLogin = async (id, password, navigation, setModalVisible) => {
   const body = {
