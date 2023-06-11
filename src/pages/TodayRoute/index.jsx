@@ -11,8 +11,9 @@ import {Card} from 'react-native-paper';
 import {apiServer} from '../../../server.config';
 import axiosInstance from '../../utils/Auth/RefreshToken';
 import {fetchRouteData} from '../../components/Route';
+import {fetchOrderData} from '../../components/OrderInfo';
 
-const Route = () => {
+const Route = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [routeData, setRouteData] = useState(null);
 
@@ -20,18 +21,39 @@ const Route = () => {
     fetchRouteData();
   }, []);
 
+  const orderIds = [...new Set(routeData?.visits.map(visit => visit.orderId))];
+  const orderIdsString = orderIds.join(',');
+  const [clickedOrderId, setClickedOrderId] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchRouteData();
-      setRouteData(data);
+      if (data && data.visits) {
+        setRouteData(data);
+        const orderIds = [...new Set(data?.visits.map(visit => visit.orderId))];
+        // 이제 다음 API 호출에 orderIds를 사용할 수 있습니다
+
+        console.log(orderIds, 'ddi');
+      }
+
       setLoading(false);
     };
 
     fetchData();
   }, []);
 
+  const handleClick = async orderId => {
+    if (orderId !== 0) {
+      try {
+        const response = await fetchOrderData(orderId);
+        navigation.navigate('orderInfo', {orderData: response});
+      } catch (error) {
+        console.error('주문 상세 데이터 가져오기 실패:', error);
+      }
+    }
+  };
   const renderItem = ({item}) => (
-    <Card style={styles.card}>
+    <Card style={styles.card} onPress={() => handleClick(item.orderId)}>
       <Card.Title title={item.name} />
       <Card.Content>
         <Text>

@@ -59,7 +59,7 @@ function RootStack() {
 
   return (
     <Stack.Navigator
-      initialRouteName="Main"
+      initialRouteName="main"
       activeColor="#e91e63"
       labelStyle={{fontSize: 12}}
       screenOptions={{
@@ -76,11 +76,10 @@ function RootStack() {
         transitionConfig: TransitionConfiguration,
       }}>
       <Stack.Screen
-        name="Main" // HomeStack 네비게이터의 이름을 지정합니다.
+        name="main"
         component={HomeStack}
         options={{headerShown: false}}
       />
-      {/* <Stack.Screen name="myPage" component={MyProfile} /> */}
     </Stack.Navigator>
   );
 }

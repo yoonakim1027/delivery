@@ -29,7 +29,7 @@ const HomeScreen = ({navigation}) => {
               onPress={() => navigation.navigate('myPage')}></Button>
           </View>
 
-          <Route />
+          <Route navigation={navigation} />
         </View>
       ) : (
         <Text>Please login to view profile</Text>

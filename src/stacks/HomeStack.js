@@ -5,6 +5,8 @@ import {
 } from '@react-navigation/stack';
 import HomeScreen from '../pages/Home';
 import MyPage from '../pages/MyPage';
+import OrderInfo from '../pages/TodayRoute/OrderInfo';
+import Route from '../pages/TodayRoute';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +22,9 @@ function HomeStack() {
       }}>
       <Stack.Screen name="main" component={HomeScreen} />
       <Stack.Screen name="myPage" component={MyPage} />
+      <Stack.Screen name="route" component={props => <Route {...props} />} />
+
+      <Stack.Screen name="orderInfo" component={OrderInfo} />
     </Stack.Navigator>
   );
 }

@@ -9,6 +9,7 @@ import MyProfileScreen from './src/pages/MyPage';
 import {Provider} from 'react-redux';
 import {configureStore} from '@reduxjs/toolkit';
 import rootReducer from './src/utils/store/reducers/rootReducer';
+import OrderInfo from './src/pages/TodayRoute/OrderInfo';
 
 const store = configureStore({
   reducer: rootReducer,
@@ -23,6 +24,7 @@ const App = () => {
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="myPage" component={MyProfileScreen} />
+          <Stack.Screen name="orderInfo" component={OrderInfo} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
