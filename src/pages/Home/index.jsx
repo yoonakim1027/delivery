@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import MyProfile from '../../components/MyProfile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Route from '../TodayRoute';
+import MyProfile from '../MyPage';
 
 const HomeScreen = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,7 +19,15 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Home</Text>
-      {isLoggedIn ? <MyProfile /> : <Text>Please login to view profile</Text>}
+      {isLoggedIn ? (
+        <View>
+          <MyProfile />
+
+          <Route />
+        </View>
+      ) : (
+        <Text>Please login to view profile</Text>
+      )}
     </View>
   );
 };
