@@ -10,13 +10,17 @@ import {
   Text,
 } from 'react-native';
 import DeliveryLogin from '../../utils/Auth/DeliveryLogin';
+import {useDispatch} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 
 export default function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const handleLogin = () => {
-    DeliveryLogin(id, password);
+    DeliveryLogin(id, password, navigation);
   };
 
   return (

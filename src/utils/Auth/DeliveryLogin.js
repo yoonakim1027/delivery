@@ -2,7 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from './RefreshToken';
 import {apiServer} from '../../../server.config';
 import axios from 'axios';
-const DeliveryLogin = async (id, password) => {
+
+const DeliveryLogin = async (id, password, navigation) => {
   const body = {
     id: id,
     password: password,
@@ -20,7 +21,9 @@ const DeliveryLogin = async (id, password) => {
     await AsyncStorage.setItem('token', token);
     await AsyncStorage.setItem('refreshToken', refreshToken);
 
+    console.log(token, refreshToken);
     console.log('로그인 성공');
+    navigation.navigate('Home'); // 페이지 이동
   } catch (err) {
     console.log('로그인 실패:', err);
   }
