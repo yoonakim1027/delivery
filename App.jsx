@@ -10,23 +10,35 @@ import {Provider} from 'react-redux';
 import {configureStore} from '@reduxjs/toolkit';
 import rootReducer from './src/utils/store/reducers/rootReducer';
 import OrderInfo from './src/pages/TodayRoute/OrderInfo';
+import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
 
 const store = configureStore({
   reducer: rootReducer,
 });
 const Stack = createStackNavigator();
+const theme = {
+  ...DefaultTheme,
+  // Specify custom property
+  myOwnProperty: true,
+  // Specify custom property in nested object
+  colors: {
+    myOwnColor: '#BADA55',
+  },
+};
 
 const App = () => {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="myPage" component={MyProfileScreen} />
-          <Stack.Screen name="orderInfo" component={OrderInfo} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <PaperProvider theme={{version: 2}}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="myPage" component={MyProfileScreen} />
+            <Stack.Screen name="orderInfo" component={OrderInfo} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
     </Provider>
   );
 };

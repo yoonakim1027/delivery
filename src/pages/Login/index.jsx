@@ -9,11 +9,12 @@ import {
   TextInput,
   Text,
   Modal,
-  Button,
+  //   Button,
 } from 'react-native';
 import DeliveryLogin from '../../utils/Auth/DeliveryLogin';
 import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+import {Button} from 'react-native-paper';
 
 export default function Login() {
   const [id, setId] = useState('');
@@ -44,7 +45,6 @@ export default function Login() {
       />
 
       <View>
-        <Text>Delivery</Text>
         <TextInput
           placeholder="ID"
           value={id}
@@ -70,18 +70,23 @@ export default function Login() {
           }}
         />
 
-        <TouchableOpacity onPress={handleLogin}>
+        <Button onPress={handleLogin}>
           <View style={{backgroundColor: 'blue', padding: 10}}>
             <Text style={{color: 'white'}}>Login</Text>
           </View>
-        </TouchableOpacity>
+        </Button>
       </View>
 
       <Modal visible={modalVisible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text>Login Failed</Text>
-            <Button title="Close" onPress={closeModal} />
+            <Button
+              raised
+              theme={{typescale: {labelLarge: {letterSpacing: 1}}}}
+              title="Close"
+              onPress={closeModal}
+            />
           </View>
         </View>
       </Modal>

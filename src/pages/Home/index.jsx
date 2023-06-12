@@ -4,10 +4,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Route from '../TodayRoute';
 import MyProfile from '../MyPage';
 import {useNavigation} from '@react-navigation/native';
+import {useTheme} from 'react-native-paper';
 
 const HomeScreen = ({navigation}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   //   const navigation = useNavigation();
+  const theme = useTheme();
 
   useEffect(() => {
     checkLoginStatus();
