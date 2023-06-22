@@ -7,6 +7,7 @@ import {
   Modal,
   View,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import DeliveryLogin from '../../utils/Auth/DeliveryLogin';
@@ -17,15 +18,21 @@ export default function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const handleLogin = async () => {
+    setIsLoading(true);
+
     try {
       await DeliveryLogin(id, password, navigation, setModalVisible);
     } catch (error) {
       console.log('로그인 실패:', error);
       setModalVisible(true); // 로그인 실패 시 모달 표시
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -72,8 +79,12 @@ export default function Login() {
           style={{marginBottom: 10}}
         />
 
-        <Button style={{marginX: 20}} mode="contained" onPress={handleLogin}>
-          Login
+        <Button
+          style={{marginX: 20}}
+          mode="contained"
+          onPress={handleLogin}
+          disabled={isLoading}>
+          {isLoading ? <ActivityIndicator color="white" /> : 'Login'}
         </Button>
       </View>
 

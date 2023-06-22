@@ -56,6 +56,12 @@ axiosInstance.interceptors.response.use(
             },
           })
           .then(async response => {
+            if (response.data.error) {
+              // refreshToken expired, redirect to login page
+              // navigation should be handled depending on your router library
+              navigation.navigate('Login');
+              return;
+            }
             await AsyncStorage.setItem(
               'accessToken',
               response.data.accessToken,
