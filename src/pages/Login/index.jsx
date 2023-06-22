@@ -42,11 +42,26 @@ export default function Login() {
       />
 
       <View>
+        <Text
+          style={{
+            justifyContent: 'center',
+            textAlign: 'center',
+            fontSize: 30,
+            marginTop: 20,
+          }}>
+          Binary Bridge
+        </Text>
+      </View>
+      <View style={{margin: 30}}>
         <TextInput
           label="ID"
           value={id}
           onChangeText={setId}
-          style={{marginBottom: 10}}
+          style={{
+            marginBottom: 10,
+            borderTopRightRadius: 15,
+            borderTopLeftRadius: 15,
+          }}
         />
 
         <TextInput

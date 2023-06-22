@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Route from '../TodayRoute';
 import MyProfile from '../MyPage';
 import {useNavigation} from '@react-navigation/native';
-import {useTheme} from 'react-native-paper';
+import {useTheme, Text, Button} from 'react-native-paper';
 
 const HomeScreen = ({navigation}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  //   const navigation = useNavigation();
   const theme = useTheme();
 
   useEffect(() => {
@@ -22,13 +21,15 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
+      <Text style={{...styles.title, color: theme.colors.primary}}>Home</Text>
       {isLoggedIn ? (
         <View>
           <View>
             <Button
-              title="My Profile"
-              onPress={() => navigation.navigate('myPage')}></Button>
+              mode="contained"
+              onPress={() => navigation.navigate('myPage')}>
+              My Profile
+            </Button>
           </View>
 
           <Route navigation={navigation} />
