@@ -18,6 +18,7 @@ export const fetchRouteData = async () => {
         },
       },
     );
+
     return response.data;
   } catch (error) {
     console.log('배송관련 데이터 가져오기 실패:', error);
