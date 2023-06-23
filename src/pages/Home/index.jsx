@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Route from '../TodayRoute';
@@ -7,22 +7,17 @@ import {useNavigation} from '@react-navigation/native';
 import {useTheme, Text, Button} from 'react-native-paper';
 
 const HomeScreen = ({navigation}) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const theme = useTheme();
 
-  useEffect(() => {
-    checkLoginStatus();
-  }, []);
-
-  const checkLoginStatus = async () => {
+  const isLoggedIn = async () => {
     const token = await AsyncStorage.getItem('token');
-    setIsLoggedIn(!!token);
+    return !!token;
   };
 
   return (
     <View style={styles.container}>
       <Text style={{...styles.title, color: theme.colors.primary}}>Home</Text>
-      {isLoggedIn ? (
+      {isLoggedIn() ? (
         <View>
           <View>
             <Button

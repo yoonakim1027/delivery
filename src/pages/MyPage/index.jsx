@@ -4,6 +4,7 @@ import {View, Text, Image, StyleSheet, ActivityIndicator} from 'react-native';
 import {apiServer} from '../../../server.config';
 import {fetchProfileData} from '../../components/MyProfile';
 import axiosInstance from '../../utils/Auth/RefreshToken';
+import NavigationService from '../../utils/Navigation/NavigationService';
 
 const MyPage = () => {
   const [loading, setLoading] = useState(true);
@@ -11,9 +12,14 @@ const MyPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchProfileData();
-      setProfileData(data);
-      setLoading(false);
+      try {
+        const data = await fetchProfileData();
+        setProfileData(data);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        NavigationService.navigate('Login');
+      }
     };
 
     fetchData();

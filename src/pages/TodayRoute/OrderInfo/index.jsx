@@ -16,7 +16,19 @@ const OrderInfo = ({route}) => {
   const {orderData} = route.params;
 
   console.log(orderData, 'orderData');
+  // 전화번호 형식을 적용하는 함수
+  const formatPhoneNumber = phoneNumber => {
+    // 정규식을 사용하여 숫자 이외의 문자 제거
+    const cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
 
+    // 전화번호 형식 적용
+    const formattedPhoneNumber = cleanedPhoneNumber.replace(
+      /(\d{3})(\d{3,4})(\d{4})/,
+      '($1) $2-$3',
+    );
+
+    return formattedPhoneNumber;
+  };
   if (!orderData) {
     return (
       <View style={styles.centered}>
@@ -47,7 +59,9 @@ const OrderInfo = ({route}) => {
         <View style={styles.tableRow} key={index}>
           <Text style={styles.tableCell}>{place.name}:</Text>
           <Text style={styles.tableCell}>{place.customerName}</Text>
-          <Text style={styles.tableCell}>{place.customerMobile}</Text>
+          <Text style={styles.tableCell}>
+            {formatPhoneNumber(place.customerMobile)}
+          </Text>
         </View>
       ))}
     </View>
