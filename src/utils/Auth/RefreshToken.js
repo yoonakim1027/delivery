@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {apiServer} from '../../../server.config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NavigationService from '../Navigation/NavigationService';
 
 let isTokenRefreshing = false;
 let failedQueue = [];
@@ -24,8 +25,8 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.response.use(
-  config => {
-    return config;
+  response => {
+    return response;
   },
   async err => {
     const originalRequest = err.config;
@@ -49,12 +50,15 @@ axiosInstance.interceptors.response.use(
       const refreshToken = await AsyncStorage.getItem('refreshToken');
       return new Promise(function (resolve, reject) {
         axios
-          .get(`${apiServer}/login`, {
-            headers: {
-              'Content-Type': 'application/json;charset=UTF-8',
-              Authorization: `${refreshToken}`,
+          .post(
+            `${apiServer}/refresh_token`,
+            {refreshToken},
+            {
+              headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+              },
             },
-          })
+          )
           .then(async response => {
             if (response.data.error) {
               // refreshToken expired, redirect to login page
@@ -78,6 +82,7 @@ axiosInstance.interceptors.response.use(
           .catch(err => {
             processQueue(err, null);
             reject(err);
+            NavigationService.navigate('Login');
           })
           .finally(() => {
             isTokenRefreshing = false;

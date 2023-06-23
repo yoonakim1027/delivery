@@ -11,6 +11,8 @@ import {configureStore} from '@reduxjs/toolkit';
 import rootReducer from './src/utils/store/reducers/rootReducer';
 import OrderInfo from './src/pages/TodayRoute/OrderInfo';
 import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
+import NavigationService from './src/utils/Navigation/NavigationService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const store = configureStore({
   reducer: rootReducer,
@@ -26,19 +28,45 @@ const theme = {
   },
 };
 
+const isLoggedIn = async () => {
+  const token = await AsyncStorage.getItem('token');
+  return !!token;
+};
+
 const App = () => {
   return (
     <Provider store={store}>
-      <PaperProvider theme={{version: 2}}>
-        <NavigationContainer>
+      <NavigationContainer
+        ref={navigatorRef => {
+          NavigationService.setNavigator(navigatorRef);
+          initialState = {
+            isLoggedIn: false, // 초기 상태는 로그인되지 않은 상태로 설정
+          };
+          fallback = {
+            /* 로딩 컴포넌트 설정 */
+          };
+        }}>
+        <PaperProvider theme={{version: 2}}>
           <Stack.Navigator>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="myPage" component={MyProfileScreen} />
-            <Stack.Screen name="orderInfo" component={OrderInfo} />
+            {isLoggedIn ? (
+              <>
+                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="myPage" component={MyProfileScreen} />
+                <Stack.Screen name="orderInfo" component={OrderInfo} />
+              </>
+            ) : (
+              <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{
+                  headerShown: false, // 로그인 화면에서 헤더 숨김
+                  gestureEnabled: false, // 로그인 화면에서 뒤로가기 제스처 비활성화
+                }}
+              />
+            )}
           </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
+        </PaperProvider>
+      </NavigationContainer>
     </Provider>
   );
 };
