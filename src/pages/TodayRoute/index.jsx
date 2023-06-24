@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -7,9 +6,7 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-import {Card} from 'react-native-paper';
-import {apiServer} from '../../../server.config';
-import axiosInstance from '../../utils/Auth/RefreshToken';
+import {Card, Title} from 'react-native-paper';
 import {fetchRouteData} from '../../components/Route';
 import {fetchOrderData} from '../../components/OrderInfo';
 
@@ -18,24 +15,24 @@ const Route = ({navigation}) => {
   const [routeData, setRouteData] = useState(null);
 
   useEffect(() => {
-    fetchRouteData();
-  }, []);
-
-  const orderIds = [...new Set(routeData?.visits.map(visit => visit.orderId))];
-  const orderIdsString = orderIds.join(',');
-  const [clickedOrderId, setClickedOrderId] = useState(0);
-
-  useEffect(() => {
     const fetchData = async () => {
       const data = await fetchRouteData();
+
       if (data && data.visits) {
-        setRouteData(data);
-        const orderIds = [...new Set(data?.visits.map(visit => visit.orderId))];
-        // 이제 다음 API 호출에 orderIds를 사용할 수 있습니다
+        const groupedData = data.visits.reduce((acc, visit) => {
+          (acc[visit.orderId] = acc[visit.orderId] || []).push(visit);
+          return acc;
+        }, {});
 
-        console.log(orderIds, 'ddi');
+        const groupedDataArray = Object.keys(groupedData).map(orderId => {
+          return {
+            orderId: orderId,
+            visits: groupedData[orderId],
+          };
+        });
+
+        setRouteData(groupedDataArray);
       }
-
       setLoading(false);
     };
 
@@ -45,24 +42,23 @@ const Route = ({navigation}) => {
   const handleClick = async orderId => {
     if (orderId !== 0) {
       try {
+        setLoading(true); // 데이터 가져오는 동안 로딩 상태를 true로 설정
         const response = await fetchOrderData(orderId);
         navigation.navigate('orderInfo', {orderData: response});
       } catch (error) {
         console.error('주문 상세 데이터 가져오기 실패:', error);
+      } finally {
+        setLoading(false); // 데이터 가져오기 완료 후 로딩 상태를 false로 설정
       }
     }
   };
   const renderItem = ({item}) => (
     <Card style={styles.card} onPress={() => handleClick(item.orderId)}>
-      <Card.Title title={item.name} />
-      <Card.Content>
-        <Text>
-          Estimated Arrival At:{' '}
-          {new Date(item.estimatedArrivalAt * 1000).toLocaleString()}
-        </Text>
-        <Text>Items to Load: {item.itemsToLoad.name || 'None'}</Text>
-        <Text>Items to Unload: {item.itemsToUnload.name || 'None'}</Text>
-      </Card.Content>
+      <Text
+        style={{
+          margin: 10,
+          marginHorizontal: 50,
+        }}>{`주문 번호 : ${item.orderId}`}</Text>
     </Card>
   );
 
@@ -76,10 +72,13 @@ const Route = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <Title style={{fontWeight: 700}}>Today's list</Title>
+      </View>
       <FlatList
-        data={routeData.visits}
+        data={routeData}
         renderItem={renderItem}
-        keyExtractor={item => item.placeId.toString()}
+        keyExtractor={item => item.orderId}
       />
     </View>
   );
@@ -99,6 +98,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  titleContainer: {
+    flex: 0.2,
   },
 });
 

@@ -2,7 +2,7 @@ import axios from 'axios';
 import {apiServer} from '../../../server.config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NavigationService from '../Navigation/NavigationService';
-
+import DeliveryLogout from './DeliveryLogout';
 let isTokenRefreshing = false;
 let failedQueue = [];
 
@@ -49,13 +49,14 @@ axiosInstance.interceptors.response.use(
 
       const refreshToken = await AsyncStorage.getItem('refreshToken');
       return new Promise(function (resolve, reject) {
-        axios
+        axiosInstance
           .post(
-            `${apiServer}/refresh_token`,
-            {refreshToken},
+            `${apiServer}/refreshToken`,
+            {},
             {
               headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
+                Authorization: `Bearer ${refreshToken}`,
               },
             },
           )
@@ -63,25 +64,22 @@ axiosInstance.interceptors.response.use(
             if (response.data.error) {
               // refreshToken expired, redirect to login page
               // navigation should be handled depending on your router library
-              navigation.navigate('Login');
               return;
             }
-            await AsyncStorage.setItem(
-              'accessToken',
-              response.data.accessToken,
-            );
-            axios.defaults.headers.common[
+            await AsyncStorage.setItem('token', response.data.token);
+            axiosInstance.defaults.headers.common[
               'Authorization'
-            ] = `Bearer ${response.data.accessToken}`;
+            ] = `Bearer ${response.data.token}`;
             originalRequest.headers[
               'Authorization'
-            ] = `Bearer ${response.data.accessToken}`;
-            processQueue(null, response.data.accessToken);
-            resolve(axios(originalRequest));
+            ] = `Bearer ${response.data.token}`;
+            processQueue(null, response.data.token);
+            resolve(axiosInstance(originalRequest));
           })
           .catch(err => {
             processQueue(err, null);
             reject(err);
+            DeliveryLogout();
             NavigationService.navigate('Login');
           })
           .finally(() => {

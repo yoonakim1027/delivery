@@ -5,6 +5,9 @@
       location = "group:BinaryBridge.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:BinaryBridge">
+   </FileRef>
+   <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>

@@ -1,5 +1,3 @@
-// App.js
-
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -13,6 +11,16 @@ import OrderInfo from './src/pages/TodayRoute/OrderInfo';
 import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
 import NavigationService from './src/utils/Navigation/NavigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  FlatList,
+} from 'react-native';
+
+import DeliveryLogout from './src/utils/Auth/DeliveryLogout';
 
 const store = configureStore({
   reducer: rootReducer,
@@ -20,50 +28,57 @@ const store = configureStore({
 const Stack = createStackNavigator();
 const theme = {
   ...DefaultTheme,
-  // Specify custom property
   myOwnProperty: true,
-  // Specify custom property in nested object
   colors: {
     myOwnColor: '#BADA55',
   },
 };
 
-const isLoggedIn = async () => {
-  const token = await AsyncStorage.getItem('token');
-  return !!token;
-};
-
 const App = () => {
+  const handleLogout = async () => {
+    await DeliveryLogout(NavigationService);
+  };
+
   return (
     <Provider store={store}>
       <NavigationContainer
         ref={navigatorRef => {
           NavigationService.setNavigator(navigatorRef);
-          initialState = {
-            isLoggedIn: false, // 초기 상태는 로그인되지 않은 상태로 설정
-          };
-          fallback = {
-            /* 로딩 컴포넌트 설정 */
-          };
         }}>
         <PaperProvider theme={{version: 2}}>
           <Stack.Navigator>
-            {isLoggedIn ? (
-              <>
-                <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="myPage" component={MyProfileScreen} />
-                <Stack.Screen name="orderInfo" component={OrderInfo} />
-              </>
-            ) : (
-              <Stack.Screen
-                name="Login"
-                component={LoginScreen}
-                options={{
-                  headerShown: false, // 로그인 화면에서 헤더 숨김
-                  gestureEnabled: false, // 로그인 화면에서 뒤로가기 제스처 비활성화
-                }}
-              />
-            )}
+            <Stack.Screen
+              options={{
+                headerRight: () => (
+                  <View style={{flexDirection: 'row', marginRight: 10}}>
+                    <Icon
+                      name="user"
+                      size={30}
+                      onPress={() => NavigationService.navigate('myPage')}
+                    />
+                    <Icon
+                      name="sign-out"
+                      size={30}
+                      style={{marginLeft: 10}}
+                      onPress={handleLogout}
+                    />
+                  </View>
+                ),
+              }}
+              name="Home"
+              component={HomeScreen}
+            />
+            <Stack.Screen name="myPage" component={MyProfileScreen} />
+            <Stack.Screen name="orderInfo" component={OrderInfo} />
+
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{
+                headerShown: false,
+                gestureEnabled: false,
+              }}
+            />
           </Stack.Navigator>
         </PaperProvider>
       </NavigationContainer>

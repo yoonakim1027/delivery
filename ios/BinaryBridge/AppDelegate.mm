@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
+#import <React/RCTLinkingManager.h> // 이미 import 문이 있다면 생략
 
 @implementation AppDelegate
 
@@ -14,6 +15,15 @@
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+    options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  if ([RCTLinkingManager application:application openURL:url options:options]) {
+    return YES;
+  }
+  // 다른 코드
+  return NO;
+}
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
 #if DEBUG

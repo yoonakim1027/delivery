@@ -1,32 +1,30 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Route from '../TodayRoute';
-import MyProfile from '../MyPage';
 import {useNavigation} from '@react-navigation/native';
 import {useTheme, Text, Button} from 'react-native-paper';
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = () => {
   const theme = useTheme();
+  const navigation = useNavigation();
 
-  const isLoggedIn = async () => {
-    const token = await AsyncStorage.getItem('token');
-    return !!token;
-  };
+  const [loggedIn, setLoggedIn] = useState(false); // 로그인 상태를 관리하기 위한 상태 변수
+
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      const token = await AsyncStorage.getItem('token');
+      setLoggedIn(!!token);
+    };
+
+    checkLoggedIn();
+  }, []); // 컴포넌트가 마운트되었을 때 한 번만 실행되도록 []
 
   return (
     <View style={styles.container}>
       <Text style={{...styles.title, color: theme.colors.primary}}>Home</Text>
-      {isLoggedIn() ? (
+      {loggedIn ? (
         <View>
-          <View>
-            <Button
-              mode="contained"
-              onPress={() => navigation.navigate('myPage')}>
-              My Profile
-            </Button>
-          </View>
-
           <Route navigation={navigation} />
         </View>
       ) : (
