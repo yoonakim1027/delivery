@@ -10,15 +10,8 @@ import rootReducer from './src/utils/store/reducers/rootReducer';
 import OrderInfo from './src/pages/TodayRoute/OrderInfo';
 import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
 import NavigationService from './src/utils/Navigation/NavigationService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  FlatList,
-} from 'react-native';
+import {View} from 'react-native';
 
 import DeliveryLogout from './src/utils/Auth/DeliveryLogout';
 
