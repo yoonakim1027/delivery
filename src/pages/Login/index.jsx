@@ -1,34 +1,33 @@
-import {useState, useEffect, useRef} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useState} from 'react';
 import {
-  View,
-  StyleSheet,
   StatusBar,
-  TouchableOpacity,
   SafeAreaView,
-  TextInput,
   Text,
   Modal,
-  //   Button,
+  View,
+  StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
+import {Button, TextInput} from 'react-native-paper';
 import DeliveryLogin from '../../utils/Auth/DeliveryLogin';
-import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import {Button} from 'react-native-paper';
 
 export default function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   const handleLogin = async () => {
+    setIsLoading(true);
     try {
       await DeliveryLogin(id, password, navigation, setModalVisible);
     } catch (error) {
       console.log('로그인 실패:', error);
       setModalVisible(true); // 로그인 실패 시 모달 표시
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -45,35 +44,42 @@ export default function Login() {
       />
 
       <View>
+        <Text
+          style={{
+            justifyContent: 'center',
+            textAlign: 'center',
+            fontSize: 30,
+            marginTop: 20,
+          }}>
+          Binary Bridge
+        </Text>
+      </View>
+      <View style={{margin: 30}}>
         <TextInput
-          placeholder="ID"
+          label="ID"
           value={id}
           onChangeText={setId}
           style={{
-            borderWidth: 1,
-            borderColor: 'gray',
-            padding: 10,
             marginBottom: 10,
+            borderTopRightRadius: 15,
+            borderTopLeftRadius: 15,
           }}
         />
 
         <TextInput
-          placeholder="Password"
+          label="Password"
           secureTextEntry
           value={password}
           onChangeText={setPassword}
-          style={{
-            borderWidth: 1,
-            borderColor: 'gray',
-            padding: 10,
-            marginBottom: 10,
-          }}
+          style={{marginBottom: 10}}
         />
 
-        <Button onPress={handleLogin}>
-          <View style={{backgroundColor: 'blue', padding: 10}}>
-            <Text style={{color: 'white'}}>Login</Text>
-          </View>
+        <Button
+          style={{marginX: 20}}
+          mode="contained"
+          onPress={handleLogin}
+          disabled={isLoading}>
+          {isLoading ? <ActivityIndicator color="white" /> : 'Login'}
         </Button>
       </View>
 
@@ -81,12 +87,9 @@ export default function Login() {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text>Login Failed</Text>
-            <Button
-              raised
-              theme={{typescale: {labelLarge: {letterSpacing: 1}}}}
-              title="Close"
-              onPress={closeModal}
-            />
+            <Button mode="contained" onPress={closeModal}>
+              Close
+            </Button>
           </View>
         </View>
       </Modal>

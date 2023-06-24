@@ -1,5 +1,3 @@
-// App.js
-
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -11,6 +9,11 @@ import {configureStore} from '@reduxjs/toolkit';
 import rootReducer from './src/utils/store/reducers/rootReducer';
 import OrderInfo from './src/pages/TodayRoute/OrderInfo';
 import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
+import NavigationService from './src/utils/Navigation/NavigationService';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {View} from 'react-native';
+
+import DeliveryLogout from './src/utils/Auth/DeliveryLogout';
 
 const store = configureStore({
   reducer: rootReducer,
@@ -18,27 +21,69 @@ const store = configureStore({
 const Stack = createStackNavigator();
 const theme = {
   ...DefaultTheme,
-  // Specify custom property
   myOwnProperty: true,
-  // Specify custom property in nested object
   colors: {
     myOwnColor: '#BADA55',
   },
 };
 
 const App = () => {
+  const handleLogout = async () => {
+    await DeliveryLogout(NavigationService);
+  };
+
   return (
     <Provider store={store}>
-      <PaperProvider theme={{version: 2}}>
-        <NavigationContainer>
+      <NavigationContainer
+        ref={navigatorRef => {
+          NavigationService.setNavigator(navigatorRef);
+        }}>
+        <PaperProvider theme={{version: 2}}>
           <Stack.Navigator>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="myPage" component={MyProfileScreen} />
-            <Stack.Screen name="orderInfo" component={OrderInfo} />
+            <Stack.Screen
+              options={{
+                title: '홈',
+                headerRight: () => (
+                  <View style={{flexDirection: 'row', marginRight: 10}}>
+                    <Icon
+                      name="user"
+                      size={30}
+                      onPress={() => NavigationService.navigate('myPage')}
+                    />
+                    <Icon
+                      name="sign-out"
+                      size={30}
+                      style={{marginLeft: 10}}
+                      onPress={handleLogout}
+                    />
+                  </View>
+                ),
+              }}
+              name="Home"
+              component={HomeScreen}
+            />
+            <Stack.Screen
+              options={{title: '내 정보'}}
+              name="myPage"
+              component={MyProfileScreen}
+            />
+            <Stack.Screen
+              name="orderInfo"
+              options={{title: '상세 보기'}}
+              component={OrderInfo}
+            />
+
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{
+                headerShown: false,
+                gestureEnabled: false,
+              }}
+            />
           </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
+        </PaperProvider>
+      </NavigationContainer>
     </Provider>
   );
 };

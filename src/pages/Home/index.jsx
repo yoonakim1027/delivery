@@ -1,36 +1,33 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
+import {View, StyleSheet, Image} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Route from '../TodayRoute';
-import MyProfile from '../MyPage';
 import {useNavigation} from '@react-navigation/native';
-import {useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 
-const HomeScreen = ({navigation}) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  //   const navigation = useNavigation();
-  const theme = useTheme();
+const HomeScreen = () => {
+  const navigation = useNavigation();
+
+  const [loggedIn, setLoggedIn] = useState(false); // 로그인 상태를 관리하기 위한 상태 변수
 
   useEffect(() => {
-    checkLoginStatus();
-  }, []);
+    const checkLoggedIn = async () => {
+      const token = await AsyncStorage.getItem('token');
+      setLoggedIn(!!token);
+    };
 
-  const checkLoginStatus = async () => {
-    const token = await AsyncStorage.getItem('token');
-    setIsLoggedIn(!!token);
-  };
+    checkLoggedIn();
+  }, []); // 컴포넌트가 마운트되었을 때 한 번만 실행되도록 []
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
-      {isLoggedIn ? (
+      {loggedIn ? (
         <View>
-          <View>
-            <Button
-              title="My Profile"
-              onPress={() => navigation.navigate('myPage')}></Button>
-          </View>
-
+          <Image
+            style={{height: 100}}
+            resizeMode={'contain'}
+            source={require('../../assets/images/banner.png')}
+          />
           <Route navigation={navigation} />
         </View>
       ) : (

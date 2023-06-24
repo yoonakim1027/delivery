@@ -5,6 +5,8 @@ import {
 } from '@react-navigation/native-stack';
 import HomeStack from './HomeStack';
 import MyProfile from '../pages/MyPage';
+import Icon from 'react-native-vector-icons/AntDesign';
+
 const Stack = createNativeStackNavigator();
 
 function RootStack() {
@@ -56,7 +58,6 @@ function RootStack() {
       opacity: current.progress,
     },
   });
-
   return (
     <Stack.Navigator
       initialRouteName="main"
@@ -64,8 +65,8 @@ function RootStack() {
       labelStyle={{fontSize: 12}}
       screenOptions={{
         presentation: 'transparentModal',
-        headerShown: false,
-        // animation: 'slide_from_left',
+        headerShown: true,
+        animation: 'slide_from_left',
         gestureEnabled: false,
         gestureDirection: 'horizontal',
         transitionSpec: {
@@ -75,11 +76,7 @@ function RootStack() {
         cardStyleInterpolator: forFade,
         transitionConfig: TransitionConfiguration,
       }}>
-      <Stack.Screen
-        name="main"
-        component={HomeStack}
-        options={{headerShown: false}}
-      />
+      <Stack.Screen name="main" component={HomeStack} />
     </Stack.Navigator>
   );
 }
