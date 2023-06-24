@@ -13,12 +13,12 @@ const HomeScreen = () => {
   useEffect(() => {
     const checkLoggedIn = async () => {
       const token = await AsyncStorage.getItem('token');
-      setLoggedIn(!!token);
+      const isLoggedIn = !!token; // 토큰이 있는 경우 true, 없는 경우 false
+      setLoggedIn(isLoggedIn);
     };
 
     checkLoggedIn();
-  }, []); // 컴포넌트가 마운트되었을 때 한 번만 실행되도록 []
-
+  }, []);
   return (
     <View style={styles.container}>
       {loggedIn ? (
