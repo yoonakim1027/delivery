@@ -49,6 +49,7 @@ const App = () => {
           <Stack.Navigator>
             <Stack.Screen
               options={{
+                title: '홈',
                 headerRight: () => (
                   <View style={{flexDirection: 'row', marginRight: 10}}>
                     <Icon
@@ -68,8 +69,16 @@ const App = () => {
               name="Home"
               component={HomeScreen}
             />
-            <Stack.Screen name="myPage" component={MyProfileScreen} />
-            <Stack.Screen name="orderInfo" component={OrderInfo} />
+            <Stack.Screen
+              options={{title: '내 정보'}}
+              name="myPage"
+              component={MyProfileScreen}
+            />
+            <Stack.Screen
+              name="orderInfo"
+              options={{title: '상세 보기'}}
+              component={OrderInfo}
+            />
 
             <Stack.Screen
               name="Login"

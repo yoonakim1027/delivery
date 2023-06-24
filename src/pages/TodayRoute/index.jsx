@@ -9,8 +9,11 @@ import {
 import {Card, Title} from 'react-native-paper';
 import {fetchRouteData} from '../../components/Route';
 import {fetchOrderData} from '../../components/OrderInfo';
+import {useNavigation} from '@react-navigation/native';
 
-const Route = ({navigation}) => {
+const Route = () => {
+  const navigation = useNavigation();
+
   const [loading, setLoading] = useState(true);
   const [routeData, setRouteData] = useState(null);
 

@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import MapView, {Marker, Polyline, Callout} from 'react-native-maps';
 import {getDistance, getCenterOfBounds} from 'geolib';
-import {DataTable} from 'react-native-paper';
 
 const MapScreen = ({
   placeInfo,
@@ -34,9 +33,9 @@ const MapScreen = ({
     };
 
     const meters = getDistance(startCoords, endCoords);
-    const kilometers = (meters / 1000).toFixed(2); // Convert meters to kilometers
+    const kilometers = (meters / 1000).toFixed(2);
 
-    const center = getCenterOfBounds([startCoords, endCoords]); // Get the center point of two coordinates
+    const center = getCenterOfBounds([startCoords, endCoords]);
 
     setDistance(kilometers);
     setCenterPoint(center);

@@ -1,5 +1,4 @@
 import {useState} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   StatusBar,
   SafeAreaView,
@@ -11,7 +10,6 @@ import {
 } from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import DeliveryLogin from '../../utils/Auth/DeliveryLogin';
-import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 
 export default function Login() {
@@ -19,13 +17,10 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const handleLogin = async () => {
     setIsLoading(true);
-
     try {
       await DeliveryLogin(id, password, navigation, setModalVisible);
     } catch (error) {

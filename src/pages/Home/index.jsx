@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Image} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Route from '../TodayRoute';
 import {useNavigation} from '@react-navigation/native';
-import {useTheme, Text, Button} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 
 const HomeScreen = () => {
-  const theme = useTheme();
   const navigation = useNavigation();
 
   const [loggedIn, setLoggedIn] = useState(false); // 로그인 상태를 관리하기 위한 상태 변수
@@ -22,9 +21,13 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={{...styles.title, color: theme.colors.primary}}>Home</Text>
       {loggedIn ? (
         <View>
+          <Image
+            style={{height: 100}}
+            resizeMode={'contain'}
+            source={require('../../assets/images/banner.png')}
+          />
           <Route navigation={navigation} />
         </View>
       ) : (

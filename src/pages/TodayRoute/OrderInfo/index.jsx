@@ -1,18 +1,15 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useState, useRef} from 'react';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {
   Text,
   Card,
-  Title,
   Paragraph,
   DataTable,
   ActivityIndicator,
   Button,
 } from 'react-native-paper';
-import MapView from 'react-native-maps';
 import MapScreen from '../MapScreen';
-import * as Animatable from 'react-native-animatable'; // Animatable 추가
+import * as Animatable from 'react-native-animatable';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const OrderInfo = ({route}) => {
@@ -37,8 +34,6 @@ const OrderInfo = ({route}) => {
     markerRef.current.showCallout(); // Show callout
   };
 
-  console.log(orderData, 'd');
-
   const handleToggleItems = () => {
     setShowItems(prevState => !prevState);
     animatableRef.current?.bounceIn(); // 버튼 클릭 시 애니메이션 시작
@@ -55,7 +50,7 @@ const OrderInfo = ({route}) => {
   return (
     <View style={styles.container}>
       <Button onPress={handleToggleItems}>
-        {showItems ? '상품 숨기기' : '상품 보기'}
+        {showItems ? 'Hide' : 'Detail'}
       </Button>
       <Animatable.View ref={animatableRef} animation="slideInDown">
         {/* 애니메이션 적용 */}
@@ -75,10 +70,14 @@ const OrderInfo = ({route}) => {
                     원
                   </Paragraph>
                   <Paragraph>
+                    지불 완료 총액 :
+                    {orderData?.payments.payedAmount.toLocaleString()} 원
+                  </Paragraph>
+                  <Paragraph>
                     결제 방식 :{' '}
                     {orderData?.payments.paymentMethod === 'onlinecard'
-                      ? '온라인 결제'
-                      : '만나서 결제'}
+                      ? '온라인 카드 선불'
+                      : '현장 카드 후불'}
                   </Paragraph>
                 </Card.Content>
               </Card>
